@@ -27,6 +27,7 @@ public class Menu {
                     case 3 -> deleteBook();
                     case 4 -> checkoutBook();
                     case 5 -> returnBook();
+                    case 6 -> updateBookCopies();
                     case 9 -> {
                         System.out.println("Goodbye.");
                         return;
@@ -44,14 +45,15 @@ public class Menu {
 
     private static void printMenu() {
         System.out.println("""
-                ===== Library Menu =====
-                1) Add Book
-                2) List Books
-                3) Delete Book
-                4) Checkout Book
-                5) Return Book
-                9) Exit
-                """);
+            ===== Library Menu =====
+            1) Add Book
+            2) List Books
+            3) Delete Book
+            4) Checkout Book
+            5) Return Book
+            6) Update Book Copies
+            9) Exit
+            """);
     }
 
     private static int readInt(String prompt) {
@@ -105,4 +107,13 @@ public class Menu {
         checkoutDao.returnBook(checkoutId);
         System.out.println("Book returned.");
     }
+
+    private static void updateBookCopies() throws Exception {
+        int id = readInt("Book ID: ");
+        int copies = readInt("New total copies: ");
+
+        bookDao.updateBookCopies(id, copies);
+        System.out.println("Book updated.");
+    }
+
 }
