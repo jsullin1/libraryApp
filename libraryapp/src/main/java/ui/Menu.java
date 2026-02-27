@@ -3,7 +3,11 @@ package ui;
 import dao.BookDao;
 import dao.MemberDao;
 import dao.CheckoutDao;
+import db.Db;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Scanner;
 
 public class Menu {
@@ -75,11 +79,14 @@ public class Menu {
     // ===== ACTION METHODS =====
 
     private static void addBook() throws Exception {
+        String isbn = readLine("ISBN: ");
         String title = readLine("Title: ");
-        int year = readInt("Year: ");
+
+        String yearStr = readLine("Year (blank for NULL): ");
+        Integer year = yearStr.isBlank() ? null : Integer.parseInt(yearStr);
         int copies = readInt("Copies: ");
 
-        bookDao.insertBook(title, year, copies);
+        bookDao.insertBook(isbn, title, year, copies);
         System.out.println("Book added.");
     }
 
@@ -97,8 +104,9 @@ public class Menu {
         int bookId = readInt("Book ID: ");
         int memberId = readInt("Member ID: ");
         int employeeId = readInt("Employee ID: ");
+        String dueDate = readLine("Due Date (YYYY-MM-DD): ");
 
-        checkoutDao.checkoutBook(bookId, memberId, employeeId);
+        checkoutDao.checkoutBook(bookId, memberId, employeeId, dueDate);
         System.out.println("Checkout successful.");
     }
 

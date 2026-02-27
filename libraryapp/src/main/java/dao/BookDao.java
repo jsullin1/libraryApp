@@ -8,20 +8,23 @@ import java.sql.ResultSet;
 
 public class BookDao {
 
-    public void insertBook(String title, int year, int copies) throws Exception {
+    public void insertBook(String isbn, String title, Integer year, int copies) throws Exception {
 
         String sql = """
-                INSERT INTO Book (ISBN, Title, PublicationYear, TotalCopies)
-                VALUES (?, ?, ?, ?)
-                """;
+            INSERT INTO Book (ISBN, Title, PublicationYear, TotalCopies)
+            VALUES (?, ?, ?, ?)
+            """;
 
         try (Connection conn = Db.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setString(1, title);
-            ps.setInt(2, year);
-            ps.setInt(3, copies);
+            ps.setString(1, isbn);
+            ps.setString(2, title);
 
+            if (year == null) ps.setNull(3, java.sql.Types.INTEGER);
+            else ps.setInt(3, year);
+
+            ps.setInt(4, copies);
             ps.executeUpdate();
         }
     }
@@ -74,6 +77,22 @@ public class BookDao {
             ps.setInt(2, bookId);
 
             ps.executeUpdate();
+        }
+    }
+
+    public void searchBooksByTitle(String keyword) throws Exception {
+        String sql = "SELECT BookID, Title, ISBN FROM Book WHERE Title LIKE ? ORDER BY Title";
+        try (Connection conn = Db.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, "%" + keyword + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    System.out.printf("%d | %s | %s%n",
+                            rs.getInt("BookID"),
+                            rs.getString("Title"),
+                            rs.getString("ISBN"));
+                }
+            }
         }
     }
 }

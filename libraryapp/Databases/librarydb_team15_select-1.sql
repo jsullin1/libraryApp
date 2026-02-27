@@ -1,5 +1,4 @@
--- librarydb_team15_select.sql
-USE librarydb_team15;
+-- librarydb_team15_select.sql (Postgres)
 
 -- 1) Select all authors
 SELECT * FROM Author;
@@ -13,7 +12,7 @@ FROM Book
 WHERE Title = 'Algorithms';
 
 -- 4) Total count of books currently checked out (active loans)
-SELECT COUNT(*) AS `Total Books Out`
+SELECT COUNT(*) AS "Total Books Out"
 FROM Checkout
 WHERE ReturnDate IS NULL;
 
@@ -25,28 +24,28 @@ JOIN Book b ON b.BookID = c.BookID
 WHERE m.Name = 'Zachary Davis'
 ORDER BY c.CheckoutDate DESC;
 
--- 6) Overdue checkouts (active + due date passed)
+-- 6) Overdue checkouts
 SELECT c.CheckoutID, m.Name AS Member, b.Title, c.DueDate
 FROM Checkout c
 JOIN Member m ON m.MemberID = c.MemberID
 JOIN Book b ON b.BookID = c.BookID
 WHERE c.ReturnDate IS NULL
-  AND c.DueDate < CURRENT_DATE()
+  AND c.DueDate < CURRENT_DATE
 ORDER BY c.DueDate ASC;
 
 -- 7) Search books by title keyword
 SELECT BookID, Title, PublicationYear
 FROM Book
-WHERE Title LIKE '%Work%';
+WHERE Title ILIKE '%Work%';
 
--- 8) Search books by author name (via Book_Author)
+-- 8) Search books by author name
 SELECT DISTINCT b.BookID, b.Title, b.PublicationYear
 FROM Book b
 JOIN Book_Author ba ON ba.BookID = b.BookID
 JOIN Author a ON a.AuthorID = ba.AuthorID
-WHERE a.Name LIKE '%Orwell%';
+WHERE a.Name ILIKE '%Orwell%';
 
--- 9) Search books by topic (via Book_Topic)
+-- 9) Search books by topic
 SELECT DISTINCT b.BookID, b.Title
 FROM Book b
 JOIN Book_Topic bt ON bt.BookID = b.BookID
@@ -78,7 +77,7 @@ ORDER BY TimesBorrowed DESC, t.Name ASC;
 
 -- 13) Available copies for "1984" (active checkouts only)
 SELECT b.Title,
-       b.TotalCopies - COUNT(c.CheckoutID) AS `Available Copies`
+       b.TotalCopies - COUNT(c.CheckoutID) AS "Available Copies"
 FROM Book b
 LEFT JOIN Checkout c
   ON b.BookID = c.BookID

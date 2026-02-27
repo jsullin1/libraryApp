@@ -60,13 +60,22 @@ INSERT INTO Employee (EmployeeID, Name, Role, Email) VALUES
 (302, 'Brian Kim', 'Assistant', 'brian.kim@library.org'),
 (303, 'Sofia Patel', 'Manager', 'sofia.patel@library.org');
 
--- CHECKOUT
--- Mix of returned + active + overdue (depending on current date)
-INSERT INTO Checkout (CheckoutID, CheckoutDate, DueDate, ReturnDate, BookID, MemberID, EmployeeID) VALUES
-(401, '2026-01-10', '2026-01-24', '2026-01-20', 102, 201, 301), -- returned
-(402, '2026-01-28', '2026-02-11', NULL,         101, 202, 302), -- overdue if after 2026-02-11
-(403, '2026-02-05', '2026-02-19', NULL,         105, 201, 301), -- active
-(404, '2026-01-15', '2026-01-29', '2026-02-02', 103, 203, 302), -- returned late
-(405, '2026-02-01', '2026-02-15', NULL,         106, 204, 303), -- active
-(406, '2025-12-10', '2025-12-24', '2026-01-02', 104, 201, 301), -- history data
-(407, '2025-11-01', '2025-11-15', '2025-11-10', 102, 204, 302); -- history + most borrowed
+
+-- CHECKOUT (Postgres)
+INSERT INTO Checkout (CheckoutID, CheckoutDate, DueDate, ReturnDate, MemberID, EmployeeID, BookID) VALUES
+(401, '2026-01-10', '2026-01-24', '2026-01-20', 201, 301, 102),
+(402, '2026-01-28', '2026-02-11', NULL,         202, 302, 101),
+(403, '2026-02-05', '2026-02-19', NULL,         201, 301, 105),
+(404, '2026-01-15', '2026-01-29', '2026-02-02', 203, 302, 103),
+(405, '2026-02-01', '2026-02-15', NULL,         204, 303, 106),
+(406, '2025-12-10', '2025-12-24', '2026-01-02', 201, 301, 104),
+(407, '2025-11-01', '2025-11-15', '2025-11-10', 204, 302, 102);
+
+
+-- Fix sequences after manual ID inserts (Postgres)
+SELECT setval(pg_get_serial_sequence('topic', 'topicid'), (SELECT MAX(topicid) FROM topic));
+SELECT setval(pg_get_serial_sequence('author', 'authorid'), (SELECT MAX(authorid) FROM author));
+SELECT setval(pg_get_serial_sequence('book', 'bookid'), (SELECT MAX(bookid) FROM book));
+SELECT setval(pg_get_serial_sequence('member', 'memberid'), (SELECT MAX(memberid) FROM member));
+SELECT setval(pg_get_serial_sequence('employee', 'employeeid'), (SELECT MAX(employeeid) FROM employee));
+SELECT setval(pg_get_serial_sequence('checkout', 'checkoutid'), (SELECT MAX(checkoutid) FROM checkout));
