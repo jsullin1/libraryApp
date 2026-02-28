@@ -179,3 +179,14 @@ If using MySQL, remove and replace the PostgreSQL dependency and add:
 
 Also, in Db.java, change line 9 to:
 private static final String URL = "jdbc:mysql://localhost:3306/TITLE OF YOUR DATABASE HERE";
+
+If using PostgreSQL, here is the dependency and the proper line for Db.java line 9:
+
+ <!-- PostgreSQL JDBC Driver -->
+<dependency>
+<groupId>org.postgresql</groupId>
+<artifactId>postgresql</artifactId>
+<version>42.7.3</version>
+</dependency>
+
+Db.java, line 9: private static final String URL = "jdbc:postgresql://localhost:5432/librarydb_team15";
