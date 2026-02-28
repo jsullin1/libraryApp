@@ -155,7 +155,7 @@ and after execution.
 ------------------------------------------------------------
 
 YouTube Link:
-<INSERT YOUTUBE LINK HERE>
+https://youtu.be/ksU7DkAE5Zg
 
 The presentation demonstrates:
 • ER Diagram overview
