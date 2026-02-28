@@ -166,3 +166,16 @@ The presentation demonstrates:
 • Query operation
 • Relationship-based JOIN query
 
+------------------------------------------------------------
+9. Dependencies
+------------------------------------------------------------
+
+If using MySQL, remove and replace the PostgreSQL dependency and add:
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.0.33</version>
+        </dependency>
+
+Also, in Db.java, change line 9 to:
+private static final String URL = "jdbc:mysql://localhost:3306/TITLE OF YOUR DATABASE HERE";
